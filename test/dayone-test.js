@@ -13,10 +13,10 @@ describe("TodoContract", async function () {
     const creatTodoTx = await todo.createTodo("Morning", "Brush your teeth");
     await creatTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("Morning");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("Brush your teeth");
 
@@ -27,20 +27,20 @@ describe("TodoContract", async function () {
     );
     await updateTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("Morning Duties");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("Take your bath");
 
     const deleteTodoTx = await todo.deleteTodo(0);
     await deleteTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("");
   });
@@ -49,10 +49,10 @@ describe("TodoContract", async function () {
     const creatTodoTx = await todo.createTodo("Morning", "Brush your teeth");
     await creatTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("Morning");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("Brush your teeth");
 
@@ -63,10 +63,10 @@ describe("TodoContract", async function () {
     );
     await updateTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("Morning Duties");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("Take your bath");
   });
@@ -77,11 +77,22 @@ describe("TodoContract", async function () {
     const deleteTodoTx = await todo.deleteTodo(0);
     await deleteTodoTx.wait();
 
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("title")
       .to.equal("");
-    expect(await todo.fetchTodo(0))
+    expect(await todo.fetchTodoWithIndex(0))
       .to.have.property("description")
       .to.equal("");
+  });
+
+  it("Should Fetch a List of todos", async function () {
+    const creatTodoTx = await todo.createTodo("Morning", "Brush your teeth");
+    const creatTodoTx1 = await todo.createTodo("Afternoon", "Eat");
+    await creatTodoTx.wait();
+    await creatTodoTx1.wait();
+
+
+    expect(await todo.fetchAllTodo())
+      .to.have.lengthOf(2);
   });
 });
